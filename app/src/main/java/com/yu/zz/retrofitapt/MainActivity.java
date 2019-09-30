@@ -1,18 +1,18 @@
 package com.yu.zz.retrofitapt;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
-import com.apt.MyApiFactory;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.yu.zz.retrofitapt.API.WeatherService;
 import com.yu.zz.retrofitapt.Apater.CityAdapter;
 import com.yu.zz.retrofitapt.Bean.CityBean;
 
 import java.util.ArrayList;
 
-import rx.android.schedulers.AndroidSchedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //view 初始化设置
-        rcl = (RecyclerView) findViewById(R.id.rcl);
+        rcl = findViewById(R.id.rcl);
         rcl.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
         //测试接口
@@ -83,16 +83,16 @@ public class MainActivity extends AppCompatActivity {
 //                });
         /*------------------step 5.2 终-------------------*/
         /*------------------step 6.4 始-------------------*/
-        MyApiFactory.getAllCity()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ArrayList<CityBean>>() {
-                    @Override
-                    public void call(ArrayList<CityBean> cityBeen) {
-                        CityAdapter adpter = new CityAdapter(MainActivity.this, cityBeen);
-                        rcl.setAdapter(adpter);
-                    }
-                });
+//        MyApiFactory.getAllCity()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<ArrayList<CityBean>>() {
+//                    @Override
+//                    public void call(ArrayList<CityBean> cityBeen) {
+//                        CityAdapter adpter = new CityAdapter(MainActivity.this, cityBeen);
+//                        rcl.setAdapter(adpter);
+//                    }
+//                });
         /*------------------step 6.4 终-------------------*/
     }
 

@@ -1,11 +1,12 @@
 package com.yu.zz.retrofitapt.Apater;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.yu.zz.retrofitapt.Bean.CityBean;
 import com.yu.zz.retrofitapt.R;
@@ -44,9 +45,9 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.Holder> {
     class Holder extends RecyclerView.ViewHolder {
         TextView tv_cityName;
 
-        public Holder(View itemView) {
+        Holder(View itemView) {
             super(itemView);
-            tv_cityName = (TextView) itemView.findViewById(R.id.tv_cityName);
+            tv_cityName = itemView.findViewById(R.id.tv_cityName);
         }
     }
 }
