@@ -10,6 +10,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions{
+            annotationProcessorOptions.includeCompileClasspath = true
+        }
     }
     buildTypes {
         release {
@@ -17,14 +21,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    annotationProcessor project(':apt')
+    api project(':lib')
+
     //——————————————————step 2 --------------------
-    implementation 'com.android.support:appcompat-v7:25.1.0'
-    implementation 'com.android.support:cardview-v7:25.1.0'
-    implementation 'com.android.support:recyclerview-v7:25.1.0'
+    implementation "androidx.appcompat:appcompat:${version_x}"
+    implementation "androidx.cardview:cardview:${version_x_card}"
+    implementation "androidx.recyclerview:recyclerview:${version_x_recyler}"
 
     implementation "com.squareup.retrofit2:retrofit:${version_retrofit}"
     implementation "com.squareup.retrofit2:converter-gson:${version_rx_convert}"
@@ -35,7 +45,4 @@ dependencies {
 
     implementation "com.google.code.gson:gson:${version_gson}"
     //——————————————————step 2 --------------------
-
-    implementation project(':lib')
-    annotationProcessor project(':apt')
 }

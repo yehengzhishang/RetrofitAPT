@@ -1,12 +1,12 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile project(':lib')
+    api project(':lib')
 
-    compile 'com.google.auto.service:auto-service:1.0-rc2'
-    compile 'com.squareup:javapoet:1.4.0'
+    implementation 'com.google.auto.service:auto-service:1.0-rc6'
+    implementation 'com.squareup:javapoet:1.11.1'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
