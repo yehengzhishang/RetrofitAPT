@@ -1,6 +1,5 @@
 package com.yu.zz.retrofitapt.Retrofit;
 
-import com.apt.NewConverter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -26,7 +25,7 @@ public class DefualtConverterFactory extends Converter.Factory {
 
     }
 
-    public final static DefualtConverterFactory create() {
+    public static DefualtConverterFactory create() {
         return new DefualtConverterFactory();
     }
 
@@ -48,7 +47,7 @@ public class DefualtConverterFactory extends Converter.Factory {
         for (Annotation a : annotations) {
             if (a instanceof ConverterInstance) {
                 Class c = ((ConverterInstance) a).value();
-                converter = NewConverter.create(c);
+//                converter = NewConverter.create(c);
                 break;
             }
         }

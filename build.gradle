@@ -2,10 +2,11 @@
 
 buildscript {
     repositories {
+        google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:3.3.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -14,10 +15,28 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
         jcenter()
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+ext {
+    version_target = 28
+    version_build = "28.0.3"
+
+    version_x = "1.1.0"
+    version_x_card = "1.0.0"
+    version_x_recyler = "1.0.0"
+
+    version_gson = "2.8.5"
+    version_rx_android = "2.1.1"
+    version_rx_convert = "2.6.2"
+    version_rx_adpter = version_rx_convert
+
+    version_ok_interceptor = "4.2.0"
+    version_retrofit = "2.6.2"
 }

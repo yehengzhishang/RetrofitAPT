@@ -19,14 +19,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Api {
 
     /*rertfofi 所用本体*/
-    public Retrofit retrofit;
+    private Retrofit retrofit;
     /*有关天气的接口*/
-    public WeatherService weatherService;
-
+    private WeatherService weatherService;
 
     //单例
     private Api() {
-
         //okhttp 拦截器
         Interceptor mInterceptor = new Interceptor() {
             @Override
