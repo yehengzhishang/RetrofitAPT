@@ -1,6 +1,5 @@
 package com.apt;
 
-import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.JavaFile;
@@ -16,7 +15,6 @@ import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
-import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
@@ -37,43 +35,38 @@ import static javax.lang.model.element.Modifier.STATIC;
 /**
  * 生成代码的主要逻辑
  */
-@AutoService(Processor.class)//自动生成 javax.annotation.processing.IProcessor 文件
 @SupportedSourceVersion(SourceVersion.RELEASE_8)//java版本支持
 @SupportedAnnotationTypes({
         "com.zz.yu.lib.ApiFactory",
         "com.zz.yu.lib.ConverterInstance"
 })
-public class AnnotationProcessor extends AbstractProcessor {
-
-    Filer mFiler; //文件相关的辅助类
-    RoundEnvironment roundEnv;
+public final class AnnotationProcessor extends AbstractProcessor {
+    private Filer mFiler; //文件相关的辅助类
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         mFiler = processingEnv.getFiler();
-        this.roundEnv = roundEnv;
-        onApi();
-        onConverter();
+        onApi(roundEnv);
+        onConverter(roundEnv);
         return true;
     }
 
 
-        /*------------------step 6.3 始-------------------*/
+    /*------------------step 6.3 始-------------------*/
 
     /**
      * 生成MyApiFactory
      */
-    private void onApi() {
+    private void onApi(RoundEnvironment roundEnv) {
         //类名
-        String Class_Name = "MyApiFactory";
+        String className = "MyApiFactory";
         //类设定  public final class MyApiFactory
-        TypeSpec.Builder tb = classBuilder(Class_Name)
+        TypeSpec.Builder tb = classBuilder(className)
                 .addModifiers(PUBLIC, FINAL)
                 .addJavadoc("by apt");
         /*生成内部方法 */
         //项目的所有用的 ApiFactory的 元素 循环
         for (TypeElement element : ElementFilter.typesIn(roundEnv.getElementsAnnotatedWith(ApiFactory.class))) {
-
             //找到元素的所有方法
             for (Element e : element.getEnclosedElements()) {
                 ExecutableElement executableElement = (ExecutableElement) e;
@@ -82,14 +75,13 @@ public class AnnotationProcessor extends AbstractProcessor {
                         MethodSpec.methodBuilder(e.getSimpleName().toString())
                                 .addJavadoc("by apt ")
                                 .addModifiers(PUBLIC, STATIC);
-
                 //方法返回值设定 与原返回值一致
                 methodBuilder.returns(TypeName.get(executableElement.getReturnType()));
                 //方法参数设定
-                String paramsString = "";
+                StringBuilder paramsString = new StringBuilder();
                 for (VariableElement ep : executableElement.getParameters()) {
                     methodBuilder.addParameter(TypeName.get(ep.asType()), ep.getSimpleName().toString());
-                    paramsString += ep.getSimpleName().toString() + ",";
+                    paramsString.append(ep.getSimpleName().toString()).append(",");
                 }
                 if (paramsString.length() == 0) {
                     methodBuilder.addStatement("return $T.getInstance()" +
@@ -106,7 +98,6 @@ public class AnnotationProcessor extends AbstractProcessor {
                 }
                 //这句话，简单的说，类加入这个方法
                 tb.addMethod(methodBuilder.build());
-
             }
         }
 
@@ -114,17 +105,17 @@ public class AnnotationProcessor extends AbstractProcessor {
         try {
             javaFile.writeTo(mFiler);
         } catch (IOException e1) {
-            e1.printStackTrace();
+//            e1.printStackTrace();
         }
     }
 
     /*------------------step 6.3 终-------------------*/
     /*------------------step 7.2 始-------------------*/
-    private void onConverter() {
+    private void onConverter(RoundEnvironment roundEnv) {
         //类名
-        String Class_Name = "NewConverter";
+        String className = "NewConverter";
         //类设定  public final class NewConverter
-        TypeSpec.Builder tb = classBuilder(Class_Name)
+        TypeSpec.Builder tb = classBuilder(className)
                 .addModifiers(PUBLIC, FINAL)
                 .addJavadoc("by Apt,用来返回一些特别的Converter 生成代码见apt 中的AnnotationProcessor nnConverter() \n")
                 .addJavadoc("为什么不用@link...因为用了也不管用 \n");
@@ -141,23 +132,22 @@ public class AnnotationProcessor extends AbstractProcessor {
         blockBuilder.beginControlFlow(" switch (mClass.getSimpleName())");
         ArrayList<ClassName> names = new ArrayList<>();
         for (Element element : roundEnv.getElementsAnnotatedWith(ConverterInstance.class)) {
-            ClassName className = null;
+            ClassName targetClassNmae = null;
             try {
                 Class currentType = element.getAnnotation(ConverterInstance.class).value();
-                className = ClassName.get(currentType);
+                targetClassNmae = ClassName.get(currentType);
             } catch (MirroredTypeException mte) {
                 DeclaredType classTypeMirror = (DeclaredType) mte.getTypeMirror();
                 TypeElement classTypeElement = (TypeElement) classTypeMirror.asElement();
-                className = ClassName.get(classTypeElement);
+                targetClassNmae = ClassName.get(classTypeElement);
             }
             //Case 语句：case 所列举的不能有重复，加入一层list的判断:
-            if (!names.contains(className)) {
-                names.add(className);
-                blockBuilder.addStatement("case $S:  \n return  new $T()", className.simpleName(), className);
+            if (!names.contains(targetClassNmae)) {
+                names.add(targetClassNmae);
+                blockBuilder.addStatement("case $S:  \n return  new $T()", targetClassNmae.simpleName(), targetClassNmae);
             }
         }
-
-        //swtich default语句，返回默认的Converter
+        //switch default语句，返回默认的Converter
         blockBuilder.add("default: \n return new $T();\n", ClassName.get("com.yu.zz.retrofitapt.Retrofit", "DefualtConverter"));
         //括号线束
         blockBuilder.endControlFlow();
@@ -170,9 +160,9 @@ public class AnnotationProcessor extends AbstractProcessor {
         try {
             javaFile.writeTo(mFiler);
         } catch (IOException e1) {
-            e1.printStackTrace();
+//            e1.printStackTrace();
         }
     }
 
-     /*------------------step 7.3 终-------------------*/
+    /*------------------step 7.3 终-------------------*/
 }
