@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.apt.WeatherServiceApiFactory;
 import com.yu.zz.retrofitapt.API.WeatherService;
 import com.yu.zz.retrofitapt.Apater.CityAdapter;
 import com.yu.zz.retrofitapt.Bean.CityBean;
@@ -13,8 +14,9 @@ import com.yu.zz.retrofitapt.Bean.CityBean;
 import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * step 1 新建一个project (加入联网权限，以及为Layout的设定)
@@ -34,7 +36,7 @@ import rx.schedulers.Schedulers;
  * 5.1 recyclerview Adapter {@link CityAdapter}
  * 5.2 数据调试 {@link #getNetData()}
  * <p>
- * step 6. 加入apt ,生成{@link MyApiFactory}
+ * step 6. 加入apt ,生成ApiFactory
  * 6.1 新建 module :lib  新建注解 {@link com.zz.yu.lib.ApiFactory}
  * 6.2 新建 module :apt (要选择 java library ,并且对gradle :apt进行三方库的引入)
  * 6.3 apt 新建Processor (AnnotationProcessor) 代码设计 onApi()
@@ -50,7 +52,6 @@ import rx.schedulers.Schedulers;
  * 7.4 更改 {@link com.yu.zz.retrofitapt.Retrofit.DefualtConverterFactory } 逻辑
  */
 public class MainActivity extends AppCompatActivity {
-
     //用来显示数据
     private RecyclerView rcl;
 
@@ -58,14 +59,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //view 初始化设置
         rcl = findViewById(R.id.rcl);
         rcl.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-
         //测试接口
         getNetData();
-
     }
 
     //网络请求 感觉是接口原因，得到数据比较慢
@@ -83,16 +81,16 @@ public class MainActivity extends AppCompatActivity {
 //                });
         /*------------------step 5.2 终-------------------*/
         /*------------------step 6.4 始-------------------*/
-//        MyApiFactory.getAllCity()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<ArrayList<CityBean>>() {
-//                    @Override
-//                    public void call(ArrayList<CityBean> cityBeen) {
-//                        CityAdapter adpter = new CityAdapter(MainActivity.this, cityBeen);
-//                        rcl.setAdapter(adpter);
-//                    }
-//                });
+        WeatherServiceApiFactory.getAllCity()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ArrayList<CityBean>>() {
+                    @Override
+                    public void accept(ArrayList<CityBean> cityBeans) {
+                        CityAdapter adapter = new CityAdapter(MainActivity.this, cityBeans);
+                        rcl.setAdapter(adapter);
+                    }
+                });
         /*------------------step 6.4 终-------------------*/
     }
 

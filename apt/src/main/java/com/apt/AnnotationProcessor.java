@@ -11,6 +11,8 @@ import com.zz.yu.lib.ConverterInstance;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -58,15 +60,24 @@ public final class AnnotationProcessor extends AbstractProcessor {
      * 生成MyApiFactory
      */
     private void onApi(RoundEnvironment roundEnv) {
-        //类名
-        String className = "MyApiFactory";
-        //类设定  public final class MyApiFactory
-        TypeSpec.Builder tb = classBuilder(className)
-                .addModifiers(PUBLIC, FINAL)
-                .addJavadoc("by apt");
+        Map<String, TypeSpec.Builder> classMap = new HashMap<>();
         /*生成内部方法 */
         //项目的所有用的 ApiFactory的 元素 循环
         for (TypeElement element : ElementFilter.typesIn(roundEnv.getElementsAnnotatedWith(ApiFactory.class))) {
+            //类名
+            String className = element.getSimpleName().toString();
+            TypeSpec.Builder tb;
+            if (classMap.containsKey(className)) {
+                tb = classMap.get(className);
+            } else {
+                //类设定  public final class
+                tb = classBuilder(className + "ApiFactory")
+                        .addModifiers(PUBLIC, FINAL)
+                        .addJavadoc("by apt");
+                classMap.put(className, tb);
+            }
+            String createCode = element.getAnnotation(ApiFactory.class).createCode();
+            createCode = createCode.replaceAll("<ClassName>", element.getQualifiedName().toString());
             //找到元素的所有方法
             for (Element e : element.getEnclosedElements()) {
                 ExecutableElement executableElement = (ExecutableElement) e;
@@ -84,15 +95,11 @@ public final class AnnotationProcessor extends AbstractProcessor {
                     paramsString.append(ep.getSimpleName().toString()).append(",");
                 }
                 if (paramsString.length() == 0) {
-                    methodBuilder.addStatement("return $T.getInstance()" +
-                                    ".weatherService.$L()"
-                            , ClassName.get("com.yu.zz.retrofitapt.API", "Api")
+                    methodBuilder.addStatement("return " + createCode + ".$L()"
                             , e.getSimpleName().toString());
                 } else {
                     methodBuilder.addStatement(
-                            "return $T.getInstance()" +
-                                    ".weatherService.$L($L)"
-                            , ClassName.get("com.yu.zz.retrofitapt.API", "Api")
+                            "return " + createCode + ".$L($L)"
                             , e.getSimpleName().toString()
                             , paramsString.substring(0, paramsString.length() - 1));
                 }
@@ -100,16 +107,19 @@ public final class AnnotationProcessor extends AbstractProcessor {
                 tb.addMethod(methodBuilder.build());
             }
         }
-
-        JavaFile javaFile = JavaFile.builder("com.apt", tb.build()).build();// 生成源代码
-        try {
-            javaFile.writeTo(mFiler);
-        } catch (IOException e1) {
+        for (String className : classMap.keySet()) {
+            TypeSpec.Builder tb = classMap.get(className);
+            JavaFile javaFile = JavaFile.builder("com.apt", tb.build()).build();// 生成源代码
+            try {
+                javaFile.writeTo(mFiler);
+            } catch (IOException e1) {
 //            e1.printStackTrace();
+            }
         }
     }
-
     /*------------------step 6.3 终-------------------*/
+
+
     /*------------------step 7.2 始-------------------*/
     private void onConverter(RoundEnvironment roundEnv) {
         //类名
@@ -125,26 +135,25 @@ public final class AnnotationProcessor extends AbstractProcessor {
                 .returns(ClassName.get("com.yu.zz.retrofitapt.Retrofit", "AbstractConverter"))
                 .addModifiers(PUBLIC, STATIC)
                 .addParameter(Class.class, "mClass");
-
         //switch 语句
         CodeBlock.Builder blockBuilder = CodeBlock.builder();
         //括号开始
         blockBuilder.beginControlFlow(" switch (mClass.getSimpleName())");
         ArrayList<ClassName> names = new ArrayList<>();
         for (Element element : roundEnv.getElementsAnnotatedWith(ConverterInstance.class)) {
-            ClassName targetClassNmae = null;
+            ClassName targetClassName;
             try {
                 Class currentType = element.getAnnotation(ConverterInstance.class).value();
-                targetClassNmae = ClassName.get(currentType);
+                targetClassName = ClassName.get(currentType);
             } catch (MirroredTypeException mte) {
                 DeclaredType classTypeMirror = (DeclaredType) mte.getTypeMirror();
                 TypeElement classTypeElement = (TypeElement) classTypeMirror.asElement();
-                targetClassNmae = ClassName.get(classTypeElement);
+                targetClassName = ClassName.get(classTypeElement);
             }
             //Case 语句：case 所列举的不能有重复，加入一层list的判断:
-            if (!names.contains(targetClassNmae)) {
-                names.add(targetClassNmae);
-                blockBuilder.addStatement("case $S:  \n return  new $T()", targetClassNmae.simpleName(), targetClassNmae);
+            if (!names.contains(targetClassName)) {
+                names.add(targetClassName);
+                blockBuilder.addStatement("case $S:  \n return  new $T()", targetClassName.simpleName(), targetClassName);
             }
         }
         //switch default语句，返回默认的Converter
@@ -163,6 +172,5 @@ public final class AnnotationProcessor extends AbstractProcessor {
 //            e1.printStackTrace();
         }
     }
-
     /*------------------step 7.3 终-------------------*/
 }

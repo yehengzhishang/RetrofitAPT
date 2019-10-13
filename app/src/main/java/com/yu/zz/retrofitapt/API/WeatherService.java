@@ -9,14 +9,14 @@ import com.zz.yu.lib.ConverterInstance;
 
 import java.util.ArrayList;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * step 3.2
  */
-@ApiFactory
+@ApiFactory(createCode = "com.yu.zz.retrofitapt.API.Api.getInstance().retrofit.create(<ClassName>.class)")
 public interface WeatherService {
 
     /*------------------step 3.2-------------------*/
@@ -36,5 +36,5 @@ public interface WeatherService {
     @ConverterInstance(SpecialConvert.class)
     @GET("weather/query")
     Observable<CityWeatherBean> getCityWeatherService(@Query("city") String city, @Query("citycode") String citycode, @Query("cityid") String cityid);
-       /*------------------step 7.4 终-------------------*/
+    /*------------------step 7.4 终-------------------*/
 }
