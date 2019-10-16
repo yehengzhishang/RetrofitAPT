@@ -1,8 +1,12 @@
 package com.yu.zz.retrofitapt.weather.bean;
 
 
+import com.google.gson.annotations.SerializedName;
+
 public class WeatherBaseBean {
     private String ret;
+    // 感觉像是相应时间
+    private float qt;
 
     public static class CityBean {
         /**
@@ -20,125 +24,88 @@ public class WeatherBaseBean {
          * lng : 120.12979
          * lat : 30.25949
          */
-        private String provinces;
-        private String city;
-        private String area;
-        private String id;
-        private String prov_py;
-        private String city_py;
-        private String qh;
-        private String jb;
-        private String yb;
-        private String area_py;
-        private String area_short_code;
-        private String lng;
-        private String lat;
-
-        public String getProvinces() {
-            return provinces;
-        }
-
-        public void setProvinces(String provinces) {
-            this.provinces = provinces;
-        }
-
-        public String getCity() {
-            return city;
-        }
-
-        public void setCity(String city) {
-            this.city = city;
-        }
-
-        public String getArea() {
-            return area;
-        }
-
-        public void setArea(String area) {
-            this.area = area;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getProv_py() {
-            return prov_py;
-        }
-
-        public void setProv_py(String prov_py) {
-            this.prov_py = prov_py;
-        }
-
-        public String getCity_py() {
-            return city_py;
-        }
-
-        public void setCity_py(String city_py) {
-            this.city_py = city_py;
-        }
-
-        public String getQh() {
-            return qh;
-        }
-
-        public void setQh(String qh) {
-            this.qh = qh;
-        }
-
-        public String getJb() {
-            return jb;
-        }
-
-        public void setJb(String jb) {
-            this.jb = jb;
-        }
-
-        public String getYb() {
-            return yb;
-        }
-
-        public void setYb(String yb) {
-            this.yb = yb;
-        }
-
-        public String getArea_py() {
-            return area_py;
-        }
-
-        public void setArea_py(String area_py) {
-            this.area_py = area_py;
-        }
-
-        public String getArea_short_code() {
-            return area_short_code;
-        }
-
-        public void setArea_short_code(String area_short_code) {
-            this.area_short_code = area_short_code;
-        }
-
-        public String getLng() {
-            return lng;
-        }
-
-        public void setLng(String lng) {
-            this.lng = lng;
-        }
-
-        public String getLat() {
-            return lat;
-        }
-
-        public void setLat(String lat) {
-            this.lat = lat;
-        }
+        @SerializedName("provinces")
+        public String provinces;
+        public String city;
+        public String area;
+        public String id;
+        public String prov_py;
+        public String city_py;
+        public String qh;
+        public String jb;
+        public String yb;
+        public String area_py;
+        public String area_short_code;
+        public String lng;
+        public String lat;
     }
 
+    public static class NowBean {
+        @SerializedName(value = "id")
+        public String id;
+        @SerializedName(value = "area_name")
+        public String areaName;
+        @SerializedName(value = "city")
+        public CityWeatherBean cityWeather;
+        @SerializedName("detail")
+        public CityWeatherBean cityWeatherBean;
+    }
+
+    public static class CityWeatherBean {
+        @SerializedName(value = "night_air_temperature")
+        public String nightAirTemperature;
+        @SerializedName(value = "day_air_temperature")
+        public String dayAirTemperature;
+        @SerializedName(value = "wind_direction")
+        public String windDirection;
+        @SerializedName(value = "wind_power")
+        public String windPower;
+        @SerializedName(value = "weather")
+        public String weather;
+        @SerializedName(value = "update_time")
+        public long updateTime;
+    }
+
+    public static class DetailBean {
+        @SerializedName("time")
+        public String time;
+        @SerializedName("date")
+        public String date;
+        @SerializedName("week")
+        public String week;
+        @SerializedName("temperature")
+        public String temperature;
+        @SerializedName("wind_direction")
+        public String windDirection;
+        @SerializedName("wind_direction_str")
+        public String windDirectionStr;
+        @SerializedName("wind_power")
+        public String windPower;
+        @SerializedName("humidity")
+        public String humidity;
+        @SerializedName("weather")
+        public String weather;
+        @SerializedName("weather_english")
+        public String weatherEnglish;
+        @SerializedName("qy")
+        public String qy;
+        @SerializedName("njd")
+        public String njd;
+        @SerializedName("rain")
+        public String rain;
+        @SerializedName("aqi")
+        public String aqi;
+        @SerializedName("quality")
+        public String quality;
+        @SerializedName("aqi_pm25")
+        public String aqiPm25;
+        @SerializedName("nongli")
+        public String nongli;
+        @SerializedName("sun_begin")
+        public String sun_begin;
+        @SerializedName("sun_end")
+        public String sun_end;
+    }
 }
 
 //{
