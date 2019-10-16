@@ -14,7 +14,7 @@ class WeatherApi {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain): Response {
             return chain.proceed(chain.request().newBuilder()
-                    .addHeader("Authorization", "APPCODEe2147361ac1343fbb9096e7ca8481612")
+                    .addHeader("Authorization", "APPCODE e2147361ac1343fbb9096e7ca8481612")
                     .build())
         }
     }
