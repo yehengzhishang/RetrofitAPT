@@ -4,9 +4,20 @@ package com.yu.zz.retrofitapt.weather.bean;
 import com.google.gson.annotations.SerializedName;
 
 public class WeatherBaseBean {
-    private String ret;
+    @SerializedName("ret")
+    public String ret;
     // 感觉像是相应时间
-    private float qt;
+    @SerializedName("qt")
+    public float qt;
+    @SerializedName("data")
+    public WeatherDataBean beanData;
+
+    public static class WeatherDataBean {
+        @SerializedName("cityinfo")
+        public CityBean beanCity;
+        @SerializedName("now")
+        public NowBean beanNow;
+    }
 
     public static class CityBean {
         /**
@@ -26,17 +37,29 @@ public class WeatherBaseBean {
          */
         @SerializedName("provinces")
         public String provinces;
+        @SerializedName("city")
         public String city;
+        @SerializedName("area")
         public String area;
+        @SerializedName("id")
         public String id;
-        public String prov_py;
-        public String city_py;
+        @SerializedName("prov_py")
+        public String provPy;
+        @SerializedName("city_py")
+        public String cityPy;
+        @SerializedName("qh")
         public String qh;
+        @SerializedName("jb")
         public String jb;
+        @SerializedName("yb")
         public String yb;
-        public String area_py;
-        public String area_short_code;
+        @SerializedName("area_py")
+        public String areaPy;
+        @SerializedName("area_short_code")
+        public String areaShortCode;
+        @SerializedName("lng")
         public String lng;
+        @SerializedName("lat")
         public String lat;
     }
 
