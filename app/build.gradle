@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'kotlin-android'
 android {
     compileSdkVersion version_target
     buildToolsVersion version_build
@@ -27,9 +27,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    annotationProcessor project(':apt')
-    api project(':lib')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${version_kotlin}"
 
     //——————————————————step 2 --------------------
     implementation "androidx.appcompat:appcompat:${version_x}"
@@ -45,4 +43,7 @@ dependencies {
 
     implementation "com.google.code.gson:gson:${version_gson}"
     //——————————————————step 2 --------------------
+
+    annotationProcessor project(':apt')
+    api project(':lib')
 }
