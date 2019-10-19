@@ -33,10 +33,11 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${version_x}"
     implementation "androidx.cardview:cardview:${version_x_card}"
     implementation "androidx.recyclerview:recyclerview:${version_x_recyler}"
+    implementation "androidx.constraintlayout:constraintlayout:${version_x_constraint}"
 
     implementation "com.squareup.retrofit2:retrofit:${version_retrofit}"
     implementation "com.squareup.retrofit2:converter-gson:${version_rx_convert}"
-    implementation "com.squareup.retrofit2:adapter-rxjava:${version_rx_adpter}"
+    implementation "com.squareup.retrofit2:adapter-rxjava:${version_rx_adapter}"
 
     implementation "com.squareup.okhttp3:logging-interceptor:${version_ok_interceptor}"
     implementation "io.reactivex.rxjava2:rxandroid:${version_rx_android}"
