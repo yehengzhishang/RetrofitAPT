@@ -29,7 +29,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${version_kotlin}"
 
-    //——————————————————step 2 --------------------
+    //——————————————————step 2 start--------------------
     implementation "androidx.appcompat:appcompat:${version_x}"
     implementation "androidx.cardview:cardview:${version_x_card}"
     implementation "androidx.recyclerview:recyclerview:${version_x_recyler}"
@@ -42,7 +42,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:${version_rx_android}"
 
     implementation "com.google.code.gson:gson:${version_gson}"
-    //——————————————————step 2 --------------------
+    //——————————————————step 2 end --------------------
 
     annotationProcessor project(':apt')
     api project(':lib')
