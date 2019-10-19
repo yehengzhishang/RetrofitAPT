@@ -49,7 +49,7 @@ public final class AnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         mFiler = processingEnv.getFiler();
         onApi(roundEnv);
-        onConverter(roundEnv);
+//        onConverter(roundEnv);
         return true;
     }
 
