@@ -6,16 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.apt.WeatherServiceApiFactory;
-import com.yu.zz.retrofitapt.API.WeatherService;
-import com.yu.zz.retrofitapt.Apater.CityAdapter;
-import com.yu.zz.retrofitapt.Bean.CityBean;
-
-import java.util.ArrayList;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import com.yu.zz.retrofitapt.weather.api.WeatherApi;
 
 
 /**
@@ -58,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WeatherApi weatherApi;
         setContentView(R.layout.activity_main);
         //view 初始化设置
         rcl = findViewById(R.id.rcl);
@@ -81,16 +73,6 @@ public class MainActivity extends AppCompatActivity {
 //                });
         /*------------------step 5.2 终-------------------*/
         /*------------------step 6.4 始-------------------*/
-        WeatherServiceApiFactory.getAllCity()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ArrayList<CityBean>>() {
-                    @Override
-                    public void accept(ArrayList<CityBean> cityBeans) {
-                        CityAdapter adapter = new CityAdapter(MainActivity.this, cityBeans);
-                        rcl.setAdapter(adapter);
-                    }
-                });
         /*------------------step 6.4 终-------------------*/
     }
 
