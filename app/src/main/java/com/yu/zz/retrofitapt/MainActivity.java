@@ -15,13 +15,11 @@ import com.yu.zz.retrofitapt.weather.api.WeatherApi;
  * step 2 gradle app 导入我们需要的三方数据
  * <p>
  * step 3 开始写网络请求(本次网络接口，用的阿里云的免费天气接口，为什么用这个，，，因为是免费的)
- * 3.1 写出实体bean {@link CityBean,com.yu.zz.retrofitapt.Bean.CityWeatherBean}
- * 3.2 写出rerforit 所需interface {@link com.yu.zz.retrofitapt.API.WeatherService}
- * 3.3 对于API 的封装 {@link com.yu.zz.retrofitapt.API.Api}
+ * 3.1 写出实体bean {@link com.yu.zz.retrofitapt.weather.bean.WeatherBaseBean,}
+ * 3.2 写出Retrofit 所需interface {@link com.yu.zz.retrofitapt.weather.api.WeatherService}
+ * 3.3 对于API 的封装 {@link WeatherApi}
  * <p>
- * step 4 对于Converter第一次 代码设计
- * 4.1 通用的Converter {@link com.yu.zz.retrofitapt.Retrofit.DefualtConverter}
- * 4.2 ConverterFactory {@link com.yu.zz.retrofitapt.Retrofit.DefualtConverterFactory}
+ * step 4 已删除
  * <p>
  * step 5 接口调试 （项目准备了两个接口，但是实际测试目前为止，只试过一个）
  * 5.1 recyclerview Adapter {@link CityAdapter}
