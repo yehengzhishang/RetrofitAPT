@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RetrofitAPT</string>
+    <string name="main_hint">test</string>
+    <string name="btn_request">request</string>
 </resources>
