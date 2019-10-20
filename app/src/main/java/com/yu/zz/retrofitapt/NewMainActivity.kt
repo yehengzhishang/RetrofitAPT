@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.apt.WeatherServiceApiFactory
 import com.google.gson.GsonBuilder
 import com.yu.zz.retrofitapt.weather.api.WeatherApi
 import com.yu.zz.retrofitapt.weather.api.WeatherService
@@ -27,6 +28,14 @@ import kotlinx.android.synthetic.main.activity_main.*
  * step 4 已删除
  * <p>
  * step 5 接口请求测试 [request]
+ * <p>
+ * step 6. 加入apt ,生成ApiFactory
+ * 6.1 新建 module :lib  新建注解 {@link com.zz.yu.lib.ApiFactory}
+ * 6.2 新建 module :apt (要选择 java library ,并且对gradle :apt进行三方库的引入)
+ * 6.3 apt 新建Processor (AnnotationProcessor) 代码设计 onApi()
+ * 6.4 引入 kapt lib apt
+ * 6.5 加入注解 [WeatherService] ApiFactory
+ * 代码替换 [request]
  */
 class NewMainActivity : AppCompatActivity() {
     private val mDataContent = MutableLiveData<String>()
@@ -39,7 +48,10 @@ class NewMainActivity : AppCompatActivity() {
 
     /*------------------step 5 start -------------------*/
     private fun request() {
-        WeatherApi.retrofit.create(WeatherService::class.java)
+        /*------------------step 6.5 start -------------------*/
+//        WeatherApi.retrofit.create(WeatherService::class.java)
+        WeatherServiceApiFactory
+                /*------------------step 6.5 end -------------------*/
                 .address("西湖", "杭州", "1", "浙江")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
