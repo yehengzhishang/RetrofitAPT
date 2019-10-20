@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion version_target
     buildToolsVersion version_build
@@ -12,7 +13,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        javaCompileOptions{
+        javaCompileOptions {
             annotationProcessorOptions.includeCompileClasspath = true
         }
     }
@@ -46,6 +47,9 @@ dependencies {
     implementation "com.google.code.gson:gson:${version_gson}"
     //——————————————————step 2 end --------------------
 
-    annotationProcessor project(':apt')
+    /*------------------step 6.4 start -------------------*/
+    //第四行 apply plugin "kotlin-kapt"
+    kapt project(':apt')
     api project(':lib')
+    /*------------------step 6.4 end -------------------*/
 }
