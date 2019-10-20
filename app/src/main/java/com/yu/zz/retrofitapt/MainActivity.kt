@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.activity_main.*
  * <p>
  * step 7 待续
  */
-class NewMainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
     private val mDataContent = MutableLiveData<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
