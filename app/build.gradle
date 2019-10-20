@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion version_target
     buildToolsVersion version_build
@@ -37,7 +38,7 @@ dependencies {
 
     implementation "com.squareup.retrofit2:retrofit:${version_retrofit}"
     implementation "com.squareup.retrofit2:converter-gson:${version_rx_convert}"
-    implementation "com.squareup.retrofit2:adapter-rxjava:${version_rx_adapter}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${version_rx_adapter}"
 
     implementation "com.squareup.okhttp3:logging-interceptor:${version_ok_interceptor}"
     implementation "io.reactivex.rxjava2:rxandroid:${version_rx_android}"
