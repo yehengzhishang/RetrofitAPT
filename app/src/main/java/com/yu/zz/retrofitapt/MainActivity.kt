@@ -36,6 +36,8 @@ import kotlinx.android.synthetic.main.activity_main.*
  * 6.4 引入 kapt lib apt
  * 6.5 加入注解 [WeatherService] ApiFactory
  * 代码替换 [request]
+ * <p>
+ * step 7 待续
  */
 class NewMainActivity : AppCompatActivity() {
     private val mDataContent = MutableLiveData<String>()
