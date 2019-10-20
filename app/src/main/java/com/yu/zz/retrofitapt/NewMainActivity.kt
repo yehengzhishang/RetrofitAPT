@@ -2,6 +2,17 @@ package com.yu.zz.retrofitapt
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.google.gson.GsonBuilder
+import com.yu.zz.retrofitapt.weather.api.WeatherApi
+import com.yu.zz.retrofitapt.weather.api.WeatherService
+import com.yu.zz.retrofitapt.weather.bean.WeatherBaseBean
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 /**
  * step 1 新建一个project (加入联网权限，以及为Layout的设定)
@@ -15,10 +26,44 @@ import androidx.appcompat.app.AppCompatActivity
  * <p>
  * step 4 已删除
  * <p>
+ * step 5 接口请求测试 [request]
  */
 class NewMainActivity : AppCompatActivity() {
+    private val mDataContent = MutableLiveData<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        bind()
+        btnCity.setOnClickListener { request() }
     }
+
+    /*------------------step 5 start -------------------*/
+    private fun request() {
+        WeatherApi.retrofit.create(WeatherService::class.java)
+                .address("西湖", "杭州", "1", "浙江")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : DisposableObserver<WeatherBaseBean>() {
+                    override fun onNext(bean: WeatherBaseBean) {
+                        mDataContent.value = GsonBuilder().setPrettyPrinting().create().toJson(bean)
+                    }
+
+                    override fun onError(e: Throwable) {
+
+                    }
+
+                    override fun onComplete() {
+                        if (!isDisposed) {
+                            dispose()
+                        }
+                    }
+                })
+    }
+
+    private fun bind() {
+        mDataContent.observe(this, Observer {
+            tvContent.text = it
+        })
+    }
+    /*------------------step 5 end -------------------*/
 }
